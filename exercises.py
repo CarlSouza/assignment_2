@@ -52,7 +52,9 @@ def exercise1(ser, mean, std):
     ```
     '''
 
-    pass
+    ans = (ser - np.mean(ser))*(std/np.std(ser))+mean
+    return ans
+
 
 
 def exercise2(ser, n):
@@ -89,7 +91,11 @@ def exercise2(ser, n):
     ```
     '''
 
-    pass
+    #conta a quantidade de vogais na serie, com tratamento para maiúscula/minúscula
+    series_qtd_vogal = ser.str.lower().str.count('[aeiou]') #entre colchetes é alguma das letras, sem colchetes é a palavra inteira 
+    #utiliza os índices para manter apenas as palavras com n vogais
+    ans = ser[series_qtd_vogal==n]
+    return ans
 
 
 def exercise3(ser):
@@ -124,7 +130,9 @@ def exercise3(ser):
     dtype: object
     '''
 
-    pass
+    bigrama = ser+' '+ser.shift(-1)
+    ans = bigrama.mode()
+    return ans
 
 
 def exercise4(ser1, ser2):
@@ -147,4 +155,10 @@ def exercise4(ser1, ser2):
     dtype: object
     '''
 
-    pass
+    df1 = pd.DataFrame([ser1,ser1.shift(-1)]).transpose()
+    mode = pd.DataFrame(df1.groupby(0)[1].agg(pd.Series.mode))
+    dicionario = pd.Series(mode[1].values,index=mode.index).to_dict()
+    df2 = pd.DataFrame([ser2,ser2.shift(1)]).transpose()
+    ans = df2[0].fillna(df2[1].map(dicionario))
+
+    return ans
